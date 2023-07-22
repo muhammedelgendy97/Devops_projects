@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stess-app
+spec:
+  containers:
+  - name: stress-app
+    image: vish/stress
+    ports:
+    - containerPort: 80
+    resources:
+      requests:
+        cpu: "0.5"
+      limits:
+        cpu: "1"
+    args:
+      - -cpus 
+      - "2"
+
+
+
+
+    

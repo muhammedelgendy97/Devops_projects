@@ -1,0 +1,52 @@
+version: '3'
+services:
+  node-app: 
+    # container_name: my-node-container 
+    # ports: 
+    #   - "4000:4000"          ana hena shelt el contianer name wel ports 3shan el loadbalancing 
+    image: mohamedelgendy/my-repo:1.4
+    env_file:
+      - ./.env
+    depends_on:
+    # - mongo
+      - redis
+  postgres:
+    image: postgres
+    volumes:
+      - postgres-db:/var/lib/postgresql/data 
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: example     
+  # mongo:
+  #   image: mongo
+  #   volumes:
+  #     - mongo_db:/data/db 
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: example      
+  # mongo-express:
+  #   image: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   depends_on:
+  #     - mongo  
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
+  #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/   /// hena shelt el mongo 3shan agrb postgres
+  redis:
+    image: redis
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    depends_on:
+      - node-app 
+volumes: 
+  mongo_db:     ## el volume di kont katbha - mongo_db w da 8lt l2n mynf3sh akny b3ml array hya mogrd mapping leli fo2 bs
+  postgres-db:
